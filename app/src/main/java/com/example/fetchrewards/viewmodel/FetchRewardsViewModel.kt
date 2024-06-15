@@ -14,16 +14,21 @@ class FetchRewardsViewModel @Inject constructor(private val dataRepository: Fetc
     ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val _items = MutableLiveData<List<FetchRewardsModel>>()
-    val itemsLiveData: LiveData<List<FetchRewardsModel>> get() = _items
+    private val _items = MutableLiveData<Map<Int, List<FetchRewardsModel>>>()
+    val itemsLiveData: LiveData<Map<Int, List<FetchRewardsModel>>> get() = _items
 
     fun fetchItems() {
         val disposable = dataRepository.fetchRewardItems()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .map { itemList ->
+                itemList.filter { !it.name.isNullOrBlank() }
+                    .sortedWith(compareBy({ it.listId }, { it.name }))
+                    .groupBy { it.listId }
+            }
             .subscribe(
                 { itemList -> _items.postValue(itemList) },
-                { error -> _items.postValue(emptyList()) } // Handle error
+                { error -> _items.postValue(emptyMap()) } // Handle error
             )
         compositeDisposable.add(disposable)
     }
