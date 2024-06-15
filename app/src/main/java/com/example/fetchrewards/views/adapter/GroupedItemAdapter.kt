@@ -1,36 +1,47 @@
-package com.example.myapplication
+package com.example.fetchrewards.views.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fetchrewards.model.FetchRewardsModel
-import com.example.myapplication.databinding.RewardsItemLayoutBinding
+import com.example.myapplication.databinding.RewardsItemGroupLayoutBinding
 
-class GroupedItemAdapter : RecyclerView.Adapter<GroupedItemAdapter.ItemViewHolder>() {
+class GroupedItemAdapter : RecyclerView.Adapter<GroupedItemAdapter.GroupViewHolder>() {
 
     private var groupedItems: Map<Int, List<FetchRewardsModel>> = emptyMap()
 
-    class ItemViewHolder(private val binding: RewardsItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: FetchRewardsModel) {
-            binding.item = item
+    class GroupViewHolder(private val binding: RewardsItemGroupLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(listId: Int, items: List<FetchRewardsModel>) {
+            binding.listId = listId
+
+            val itemAdapter = RewardsItemAdapter()
+            itemAdapter.setItems(items)
+
+            binding.groupRecyclerView.apply {
+                layoutManager = LinearLayoutManager(binding.root.context)
+                adapter = itemAdapter
+            }
+
             binding.executePendingBindings()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = RewardsItemLayoutBinding.inflate(layoutInflater, parent, false)
-        return ItemViewHolder(binding)
+        val binding = RewardsItemGroupLayoutBinding.inflate(layoutInflater, parent, false)
+        return GroupViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val items = groupedItems.values.flatten()
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
+        val listId = groupedItems.keys.toList()[position]
+        val items = groupedItems[listId].orEmpty()
+        holder.bind(listId, items)
     }
 
-    override fun getItemCount(): Int = groupedItems.values.flatten().size
+    override fun getItemCount(): Int = groupedItems.size
 
-    fun setItems(newGroupedItems: Map<Int, List<FetchRewardsModel>>) {
+    fun setGroupedItems(newGroupedItems: Map<Int, List<FetchRewardsModel>>) {
         groupedItems = newGroupedItems
         notifyDataSetChanged()
     }

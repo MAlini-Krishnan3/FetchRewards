@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetchrewards.MyApplication
 import com.example.fetchrewards.viewmodel.FetchRewardsViewModel
-import com.example.myapplication.GroupedItemAdapter
+import com.example.fetchrewards.views.adapter.GroupedItemAdapter
 import com.example.myapplication.databinding.FetchRewardsFragmentBinding
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ class FetchRewardsFragment : Fragment(){
     private val fetchRewardsViewModel: FetchRewardsViewModel by viewModels { viewModelFactory }
     private var _binding: FetchRewardsFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var itemAdapter: GroupedItemAdapter
+    private lateinit var groupAdapter: GroupedItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as MyApplication).appComponent.inject(this)
@@ -38,11 +38,11 @@ class FetchRewardsFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        itemAdapter = GroupedItemAdapter()
+        groupAdapter = GroupedItemAdapter()
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = itemAdapter
+            adapter = groupAdapter
         }
     }
 
@@ -50,7 +50,7 @@ class FetchRewardsFragment : Fragment(){
         super.onResume()
 
         fetchRewardsViewModel.itemsLiveData.observe(viewLifecycleOwner) { groupedItems ->
-            itemAdapter.setItems(groupedItems)
+            groupAdapter.setGroupedItems(groupedItems)
         }
 
         fetchRewardsViewModel.fetchItems()
