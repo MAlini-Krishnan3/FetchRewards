@@ -1,12 +1,16 @@
 package com.example.fetchrewards.di
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.fetchrewards.datarepo.FetchRewardsDataRepo
 import com.example.fetchrewards.service.FetchRewardsApi
-import com.example.myapplication.viewmodel.ViewModelFactory
+import com.example.fetchrewards.viewmodel.FetchRewardsViewModel
+import com.example.myapplication.di.ViewModelFactory
+import com.example.myapplication.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,6 +21,11 @@ abstract class AppModule {
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FetchRewardsViewModel::class)
+    abstract fun bindMainViewModel(viewModel: FetchRewardsViewModel): ViewModel
 
     companion object {
         @Provides
