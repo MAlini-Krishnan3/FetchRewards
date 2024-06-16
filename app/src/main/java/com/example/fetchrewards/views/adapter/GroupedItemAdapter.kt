@@ -2,10 +2,10 @@ package com.example.fetchrewards.views.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fetchrewards.model.FetchRewardsModel
 import com.example.myapplication.databinding.RewardsItemGroupLayoutBinding
+import com.example.myapplication.databinding.RewardsItemLayoutBinding
 
 class GroupedItemAdapter : RecyclerView.Adapter<GroupedItemAdapter.GroupViewHolder>() {
 
@@ -15,12 +15,15 @@ class GroupedItemAdapter : RecyclerView.Adapter<GroupedItemAdapter.GroupViewHold
         fun bind(listId: Int, items: List<FetchRewardsModel>) {
             binding.listId = listId
 
-            val itemAdapter = RewardsItemAdapter()
-            itemAdapter.setItems(items)
+            // Clear any existing rows
+            binding.groupTable.removeAllViews()
 
-            binding.groupRecyclerView.apply {
-                layoutManager = LinearLayoutManager(binding.root.context)
-                adapter = itemAdapter
+            // Inflate and add each item as a row in the table
+            val inflater = LayoutInflater.from(binding.root.context)
+            items.forEach { item ->
+                val itemBinding = RewardsItemLayoutBinding.inflate(inflater, binding.groupTable, false)
+                itemBinding.item = item
+                binding.groupTable.addView(itemBinding.root)
             }
 
             binding.executePendingBindings()

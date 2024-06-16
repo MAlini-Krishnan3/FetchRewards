@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="listId"
             type="int" />
@@ -17,13 +18,14 @@
             android:id="@+id/group_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text='@{"List ID: " + listId}'
-            android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/group_recycler_view"
+        <TableLayout
+            android:id="@+id/group_table"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+        </TableLayout>
     </LinearLayout>
 </layout>

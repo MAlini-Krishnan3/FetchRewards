@@ -15,7 +15,10 @@ class FetchRewardsViewModel @Inject constructor(private val dataRepository: Fetc
 
     private val compositeDisposable = CompositeDisposable()
     private val _items = MutableLiveData<Map<Int, List<FetchRewardsModel>>>()
+    private val _error = MutableLiveData<Boolean>()
+
     val itemsLiveData: LiveData<Map<Int, List<FetchRewardsModel>>> get() = _items
+    val errorLiveData: LiveData<Boolean> get() = _error
 
     fun fetchItems() {
         val disposable = dataRepository.fetchRewardItems()
@@ -27,8 +30,12 @@ class FetchRewardsViewModel @Inject constructor(private val dataRepository: Fetc
                     .groupBy { it.listId }
             }
             .subscribe(
-                { itemList -> _items.postValue(itemList) },
-                { error -> _items.postValue(emptyMap()) } // Handle error
+                { itemList -> _items.postValue(itemList)
+                    _error.postValue(false)
+                },
+                { error -> _items.postValue(emptyMap())
+                    _error.postValue(true)
+                } // Handle error
             )
         compositeDisposable.add(disposable)
     }

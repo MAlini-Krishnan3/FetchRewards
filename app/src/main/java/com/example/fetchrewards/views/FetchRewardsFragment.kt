@@ -14,7 +14,7 @@ import com.example.fetchrewards.views.adapter.GroupedItemAdapter
 import com.example.myapplication.databinding.FetchRewardsFragmentBinding
 import javax.inject.Inject
 
-class FetchRewardsFragment : Fragment(){
+class FetchRewardsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val fetchRewardsViewModel: FetchRewardsViewModel by viewModels { viewModelFactory }
@@ -44,16 +44,28 @@ class FetchRewardsFragment : Fragment(){
             layoutManager = LinearLayoutManager(context)
             adapter = groupAdapter
         }
+
+
     }
 
     override fun onResume() {
         super.onResume()
 
+        fetchRewardsViewModel.fetchItems()
+
         fetchRewardsViewModel.itemsLiveData.observe(viewLifecycleOwner) { groupedItems ->
             groupAdapter.setGroupedItems(groupedItems)
         }
 
-        fetchRewardsViewModel.fetchItems()
+        fetchRewardsViewModel.errorLiveData.observe(viewLifecycleOwner) { isError ->
+            if (isError) {
+                binding.errorTv.visibility = View.VISIBLE
+            } else {
+                binding.errorTv.visibility = View.GONE
+            }
+        }
+
+
     }
 
     override fun onDestroyView() {
