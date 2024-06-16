@@ -2,6 +2,7 @@ package com.example.fetchrewards.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.fetchrewards.constants.FetchRewardsConstants.BASE_URL
 import com.example.fetchrewards.datarepo.FetchRewardsDataRepo
 import com.example.fetchrewards.service.FetchRewardsApi
 import com.example.fetchrewards.viewmodel.FetchRewardsViewModel
@@ -17,7 +18,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import javax.inject.Singleton
 
 @Module
-abstract class AppModule {
+abstract class FetchRewardsModule {
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
@@ -32,7 +33,7 @@ abstract class AppModule {
         @Singleton
         fun provideRetrofit(): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("https://fetch-hiring.s3.amazonaws.com/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()

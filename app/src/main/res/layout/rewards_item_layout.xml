@@ -28,6 +28,6 @@
             android:layout_weight="1"
             android:background="@drawable/table_border"
             android:paddingStart="4dp"
-            android:text='@{"ID: " + item.id}' />
+            android:text='@{String.valueOf(item.id)}' />
     </TableRow>
 </layout>

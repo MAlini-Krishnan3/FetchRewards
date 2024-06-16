@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fetchrewards.MyApplication
+import com.example.fetchrewards.FetchRewardsApplication
 import com.example.fetchrewards.viewmodel.FetchRewardsViewModel
 import com.example.fetchrewards.views.adapter.GroupedItemAdapter
 import com.example.myapplication.databinding.FetchRewardsFragmentBinding
@@ -23,7 +23,7 @@ class FetchRewardsFragment : Fragment() {
     private lateinit var groupAdapter: GroupedItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (requireActivity().application as MyApplication).appComponent.inject(this)
+        (requireActivity().application as FetchRewardsApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
     }
 
