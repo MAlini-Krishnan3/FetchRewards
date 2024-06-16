@@ -2,11 +2,15 @@ package com.example.fetchrewards.views.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fetchrewards.model.FetchRewardsModel
+import com.example.fetchrewards.views.adapter.utils.ItemDiffCallback
 import com.example.myapplication.databinding.RewardsItemLayoutBinding
 
-class RewardsItemAdapter : RecyclerView.Adapter<RewardsItemAdapter.ItemViewHolder>() {
+class RewardsItemAdapter : ListAdapter<FetchRewardsModel, RewardsItemAdapter.ItemViewHolder>(
+    ItemDiffCallback()
+)  {
 
     private var items: List<FetchRewardsModel> = emptyList()
 
@@ -27,10 +31,4 @@ class RewardsItemAdapter : RecyclerView.Adapter<RewardsItemAdapter.ItemViewHolde
         holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int = items.size
-
-    fun setItems(newItems: List<FetchRewardsModel>) {
-        items = newItems
-        notifyDataSetChanged()
-    }
 }

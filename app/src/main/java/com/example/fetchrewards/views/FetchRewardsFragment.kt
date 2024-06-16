@@ -54,7 +54,7 @@ class FetchRewardsFragment : Fragment() {
         fetchRewardsViewModel.fetchItems()
 
         fetchRewardsViewModel.itemsLiveData.observe(viewLifecycleOwner) { groupedItems ->
-            groupAdapter.setGroupedItems(groupedItems)
+            groupAdapter.submitList(groupedItems.map { Pair(it.key, it.value) })
         }
 
         fetchRewardsViewModel.errorLiveData.observe(viewLifecycleOwner) { isError ->
