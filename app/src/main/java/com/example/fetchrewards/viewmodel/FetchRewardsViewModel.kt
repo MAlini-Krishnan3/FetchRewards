@@ -26,7 +26,7 @@ class FetchRewardsViewModel @Inject constructor(private val dataRepository: Fetc
             .observeOn(AndroidSchedulers.mainThread())
             .map { itemList ->
                 itemList.filter { !it.name.isNullOrBlank() }
-                    .sortedWith(compareBy({ it.listId }, { it.name }))
+                    .sortedWith(compareBy({ it.listId }, { extractNumber(it.name) }))
                     .groupBy { it.listId }
             }
             .subscribe(
@@ -38,6 +38,12 @@ class FetchRewardsViewModel @Inject constructor(private val dataRepository: Fetc
                 } // Handle error
             )
         compositeDisposable.add(disposable)
+    }
+
+    private fun extractNumber(name: String?): Int {
+        val regex = "\\d+".toRegex()
+        val match = regex.find(name ?: "")
+        return match?.value?.toIntOrNull() ?: 0
     }
 
     override fun onCleared() {
