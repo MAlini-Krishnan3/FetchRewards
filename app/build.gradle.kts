@@ -68,4 +68,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
+    testImplementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    testImplementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    testImplementation("com.google.code.gson:gson:2.8.8")
 }
