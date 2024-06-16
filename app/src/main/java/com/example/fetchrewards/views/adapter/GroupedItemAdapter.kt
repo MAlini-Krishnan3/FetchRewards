@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fetchrewards.model.FetchRewardsModel
+import com.example.myapplication.R
 import com.example.myapplication.databinding.RewardsItemGroupLayoutBinding
 import com.example.myapplication.databinding.RewardsItemLayoutBinding
 
@@ -17,6 +18,11 @@ class GroupedItemAdapter : RecyclerView.Adapter<GroupedItemAdapter.GroupViewHold
 
             // Clear any existing rows
             binding.groupTable.removeAllViews()
+
+            // Inflate and add the table header row
+            val headerRow = LayoutInflater.from(binding.root.context)
+                .inflate(R.layout.table_header_row, binding.groupTable, false)
+            binding.groupTable.addView(headerRow)
 
             // Inflate and add each item as a row in the table
             val inflater = LayoutInflater.from(binding.root.context)
