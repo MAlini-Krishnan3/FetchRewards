@@ -7,6 +7,7 @@ import com.example.fetchrewards.model.FetchRewardsModel
 import com.example.fetchrewards.testUtil.TestUtils
 import com.example.fetchrewards.viewmodel.FetchRewardsViewModel
 import io.mockk.MockKAnnotations
+import io.mockk.clearMocks
 import io.mockk.every
 
 import org.junit.Rule
@@ -14,6 +15,7 @@ import org.junit.rules.TestRule
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.runs
+import io.mockk.spyk
 import io.mockk.verify
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
@@ -48,8 +50,8 @@ class FetchRewardsViewModelTest {
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
-        viewModel = FetchRewardsViewModel(dataRepository)
+        MockKAnnotations.init(this, relaxed = true)
+        viewModel = spyk(FetchRewardsViewModel(dataRepository))
         viewModel.itemsLiveData.observeForever(itemsObserver)
         viewModel.errorLiveData.observeForever(errorObserver)
         TestUtils.setUpRxSchedulers()
@@ -64,6 +66,7 @@ class FetchRewardsViewModelTest {
     fun tearDown() {
         viewModel.itemsLiveData.removeObserver(itemsObserver)
         viewModel.errorLiveData.removeObserver(errorObserver)
+        clearMocks(dataRepository, itemsObserver, errorObserver, viewModel)
     }
 
     @Test
@@ -79,8 +82,9 @@ class FetchRewardsViewModelTest {
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
 
         // Then
-        verify { itemsObserver.onChanged(match { it.size != 0 }) }
+        verify { itemsObserver.onChanged(match { it.isNotEmpty() }) }
         verify { errorObserver.onChanged(false) }
+        verify { viewModel.fetchItems() }
     }
 
     @Test
